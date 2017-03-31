@@ -13,7 +13,7 @@ public class MyArray<T extends ArrayItemInterface> {
 		try{
 			if(top < pila.length){
 				pila[++top] = ai;
-				System.out.println("Sto inserendo \"" + ai.getVal() + "\" in posizione " + top);
+				System.out.println("Inserito \"" + ai.getVal() + "\" in posizione " + top);
 			}
 		}catch(Exception e){
 			System.out.println("\r\nStack pieno, rimuovi almeno un elemento prima di inserirne un altro");
@@ -23,7 +23,7 @@ public class MyArray<T extends ArrayItemInterface> {
 
 	public void pop(){
 		if(top > -1){
-			System.out.println("Ho rimosso \"" + pila[top].getVal() + "\" dalla posizione " + top);
+			System.out.println("Rimosso \"" + pila[top].getVal() + "\" dalla posizione " + top);
 			pila[top--] = null;
 		}else{
 			System.out.println("\r\nStack vuoto, impossibile rimuovere altri elementi");

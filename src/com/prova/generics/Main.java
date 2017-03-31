@@ -1,34 +1,82 @@
 package com.prova.generics;
 
-import com.prova.array.ArrayItem;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.prova.array.MyArray;
-import com.prova.contenuto.Acqua;
-import com.prova.contenuto.Vino;
+import com.prova.array.Persona;
 
 public class Main {
 	public static void main(String[] args) {
-		Bottiglia<Acqua> bAcqua = new Bottiglia<Acqua>(new Acqua());
-		Bottiglia<Vino> bVino = new Bottiglia<Vino>(new Vino());
-		
-		BraccioAutomatico braccio = new BraccioAutomatico();
-        //braccio.prendiBottiglia(bAcqua);
-        //braccio.prendiBottiglia(bVino);
-		
-        System.out.println("-----------------------------------------");
+		Scanner scan = new Scanner(System.in);
+		String input = "";	
+		int counter = 0;
+        Persona[] pList = new Persona[2];
+        MyArray<Persona> myA = new MyArray<>(pList);
         
-        ArrayItem[] items = new ArrayItem[5];
-        MyArray<ArrayItem> myA = new MyArray<>(items);
-        
-        for (int i = 0; i < items.length; i++) {
-        	myA.push(new ArrayItem("Elemento " + i));
+        printMsg();
+                        
+        while(!("q".equals(input = scan.nextLine()))){
+			switch(input){
+				case "n":
+					if (counter<pList.length)
+						InserisciPersona(pList, myA, scan);
+					else
+						System.out.println("Lista già piena");
+					printMsg();
+					counter++;
+				break;
+				case "r":
+					myA.pop();
+					printMsg();
+					counter--;
+				break;
+				default:
+					System.err.println("Comando inserito non valido, scegli un comando tra quelli disponibili!");
+					printMsg();
+				break;
+			}
 		}
-        myA.push(new ArrayItem("Elemento di troppo"));
-        System.out.println("-----------------------------------------");
+		System.out.println("Esecuzione Terminata!");
+		scan.close();
+	}	
+	
+	public static void printMsg(){		
+		System.out.println("------------------------------------------------");
+		System.out.println("Scegli un'azione tra le seguenti: ");
+		System.out.println("  n => Inserisci una nuova persona");
+		System.out.println("  r => Rimuovi una persona");
+		System.out.println("  q => Termina il programma");
+	}
+	
+	public static void InserisciPersona(Persona[] pList, MyArray<Persona> myA, Scanner scan){
+		String nome = "", cognome = "", cf = "";
+		
+		System.out.println("Inserisci il nome della persona da inserire:");
+        nome = scan.nextLine();
         
-        for (int i = 0; i < items.length; i++) {
-        	myA.pop();
-		}
-        myA.pop();
-        System.out.println("-----------------------------------------");
+        System.out.println("Inserisci il cognome della persona da inserire:");
+        cognome = scan.nextLine();
+        
+        System.out.println("Inserisci il Codice Fiscale della persona da inserire:");
+        cf = scan.nextLine();
+        
+        while(!controllaCF(cf)){
+        	System.out.println("Codice Fiscale non corretto, ritenta:");
+            cf = scan.nextLine();
+        }
+        
+        myA.push(new Persona(nome, cognome, cf));        
+	}
+	
+	public static boolean controllaCF(String cf){
+		Pattern cfRegExp = Pattern.compile("[A-Za-z]{6}[0-9]{2}[A-Za-z]{1}[0-9]{2}[A-Za-z0-9]{4}[A-Za-z]{1}");
+		Matcher match = cfRegExp.matcher(cf);
+
+		if(match.matches())
+			return true;
+		else
+			return false;
 	}
 }
